@@ -1,45 +1,24 @@
 <template>
-  <q-page class="row items-center justify-evenly q-pa-md">
-    <div>
-      <q-btn
-        @click="callback"
-        label="Login Using Google"
-        color="green"
-        rounded
-        class="q-mb-md"
-      />
-
-      <div v-if="userProfile">
-        <q-card class="q-ma-md">
-          <q-card-section>
-            <div class="row items-center">
-              <img size="64px" :src="userProfile.picture" />
-              <div class="q-ml-md">
-                <div class="text-h6">{{ userProfile.name }}</div>
-                <div class="text-subtitle2">{{ userProfile.email }}</div>
-              </div>
-            </div>
+  <q-page class="q-pa-md items-start q-gutter-xs">
+    <div class="row q-col-gutter-sm">
+      <div :class="i.class" v-for="i in cards" :key="i.id">
+        <q-card class="cursor-pointer" :class="'bg-' + i.cor" v-if="i.qtLaudos">
+          <q-card-section horizontal>
+            <q-card-section class="col-md-7 col-lg-9 col-sm-10 text-middle">
+              <div class="card-title">Caminhões: {{ i.flagPosicao }}</div>
+              <div class="time">Nenhuma atividade ainda</div>
+            </q-card-section>
+            <q-separator vertical />
+            <q-card-section>
+              <div class="card-number text-middle">{{ i.qtLaudos }}</div>
+            </q-card-section>
           </q-card-section>
         </q-card>
       </div>
+    </div>
 
-      <div v-if="events.length">
-        <q-card class="q-ma-md">
-          <q-card-section>
-            <div class="text-h6 q-mb-md">Events</div>
-            <q-list bordered>
-              <q-item v-for="event in events" :key="event.id">
-                <q-item-section>
-                  <q-item-label>{{ event.summary }}</q-item-label>
-                  <q-item-label caption>{{
-                    formatDate(event.start.dateTime)
-                  }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-        </q-card>
-      </div>
+    <div class="flex flex-center">
+      <img class="image" src="logo_home.svg" />
     </div>
   </q-page>
 </template>
@@ -85,7 +64,60 @@ const callback = async () => {
   }
 };
 
+const cards = [
+  {
+    qtLaudos: 10,
+    flagPosicao: "Carregar",
+    cor: "brown",
+    class: "col-md-4 col-lg-4 col-sm-12 col-xs-12",
+    id: 1,
+  },
+  {
+    qtLaudos: 10,
+    flagPosicao: "Descarregar",
+    cor: "blue-grey",
+    class: "col-md-4 col-lg-4 col-sm-12 col-xs-12",
+    id: 2,
+  },
+  {
+    qtLaudos: 10,
+    flagPosicao: "Fila",
+    cor: "teal",
+    class: "col-md-4 col-lg-4 col-sm-12 col-xs-12",
+    id: 3,
+  },
+];
+
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleString();
 };
 </script>
+
+<style scoped>
+.image {
+  height: calc(100vh - 440px);
+  padding-top: 10%;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+.card-title {
+  color: #fff;
+
+  font-size: 19px;
+}
+
+.card-number {
+  color: #fff;
+  font-weight: bold;
+  font-size: 27px;
+}
+
+.time {
+  color: #fff;
+  font-size: 10px;
+  font-weight: normal;
+}
+</style>

@@ -1,10 +1,11 @@
 {
   "name": "quasar-project",
-  "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
-  "author": "Rafael Almeida Lara <rafaelalmeidalara007@gmail.com>",
+  "version": "1.0.0",
+  "description": "Controle de Carga e Descarga de caminhões",
+  "productName": "Controle de Cargas",
+  "author": "Rafael Almeida",
   "private": true,
+  "copyright": "2024",
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",

@@ -1,106 +1,104 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header bordered>
       <q-toolbar>
         <q-btn
           flat
           dense
           round
           icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
+          @click="leftDrawerOpen = !leftDrawerOpen"
         />
-
         <q-toolbar-title>
-          Quasar App
+          <router-link class="title" to="/">Controle de Cargas </router-link>
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn flat rounded icon-right="account_circle" :label="user.name" />
       </q-toolbar>
     </q-header>
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
+      side="left"
+      :width="300"
+      :breakpoint="500"
       bordered
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+      <r-menu @logout="logoutPage" />
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer elevated>
+      <q-toolbar>
+        <q-toolbar-title>
+          <small>&copy; {{ copyright }} - PLIM LTDA</small>
+        </q-toolbar-title>
+        <q-space></q-space>
+        <small @click="copyToClipBoard">Powered By {{ author }}</small>
+        <strong @click="copyToClipBoard"
+          ><small>&nbsp;&nbsp;Versão {{ appVersion }}</small></strong
+        >
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { ref } from "vue";
+import pachageInfo from "../../package.json";
+import { useQuasar, copyToClipboard } from "quasar";
 
 defineOptions({
-  name: 'MainLayout'
+  name: "MainLayout",
 });
 
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
+const $q = useQuasar();
+const leftDrawerOpen = ref(true);
+const appVersion = pachageInfo.version;
+const author = pachageInfo.author;
+const copyright = pachageInfo.copyright;
+const user = { name: "Usuário Teste" };
 
-const leftDrawerOpen = ref(false);
+const logoutPage = async () => {
+  $q.notify({
+    message: "Desconectando....",
+    type: "warning",
+    timeout: 2000,
+    progress: true,
+    spinner: true,
+  });
+};
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
+const copyToClipBoard = () => {
+  copyToClipboard("Precisando ligue! | Rafael Almeida (69) 99966-3803")
+    .then(() => {
+      $q.notify({
+        message: "Dados Copiados para a área de transferência!",
+        type: "positive",
+      });
+    })
+    .catch(() => {
+      $q.notify({
+        message: "Falha ao copiar NF para a área de transferência!",
+        type: "negative",
+      });
+    });
+};
 </script>
+
+<style>
+.title {
+  text-decoration: none;
+  color: white;
+}
+.q-drawer__content {
+  background-color: #0c9abe !important;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+</style>
